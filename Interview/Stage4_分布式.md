@@ -82,39 +82,181 @@
 
 #### 说说你对Linux系统的认识？
 
+Linux最大的特点是源码开放,与Windows相比，它的优点在于：
+
+1. 网络的支持很好，在网络服务中运行更稳定。很多在Windows组网中出现的问题，Linux里完全没有。
+
+2. 算机硬件的要求比Windows要低，能出色的高效率的完成大型程序。
+
+3. 源码开放，用户可以根据自己的需要来修改或改进操作系统，而且这完全是合法的，当然这需要一定的编程能力。
+
+4. 了编程操作的有利环境，系统本身就能编程。
+
+5. 序运行的稳定性很好，它的稳定性甚至超过了WindowsXP，而且性能更出色。同样的硬件配置，装有Linux系统的计算机要比装Windows的计算机运行相同程序的效率要高出至少15％
+
+6. 安全性较Windows高，一旦有漏洞可以马上补上，而且没有盗版的分别，虽然源码开放，但是好像没有听说过专门针对Linux而写的病毒。呵呵，看来那些病毒制造者觉得还是挑战别人都不知道的比较刺激。
+
+而缺点在于：
+
+1. 专门为Linux写的程序没有Windows的多，有些工具需要专门使用Linux版的。
+
+2. 程序的安装比较麻烦，需要一定的编程能力(不过不高，看说明就会了)
+
+3. 很多设置和功能也需要用命令来完成，虽然Windows也有命令，但是Linux需要的操作更多。
+
 #### Linux系统启动，重启、退出的常用指令？
+
+```shell
+shutdown [option] [time] [message]
+shutdown -h +9 "服务器正在关闭，请保存的工作并注销。"
+shutdown -c 取消关机
+reboot 重启
+kill PID
+kill -9 PID //强制杀死
+kill -9 %工作号
+pkill -9 '进程名' //全杀
+```
 
 #### 说几个Linux系统下常用的文件操作？
 
+```sh
+cd <目录名> 进入某个目录
+cd .. 返回上级菜单
+cd ../.. 返回上两级目录
+cd 进入个人主目录
+pwd 显示当前路径
+ls 查看文件目录列表
+mkdir <目录名> 创建目录
+rm -f file1 删除'file1'文件
+rmdir dir1 删除'dir1'目录
+cat file1 查看文件内容
+```
+
 #### Linux系统中的防火墙操作有哪些？
+
+```sh
+systemctl start firewalld 启动
+systemctl status firewalld 查看状态
+systemctl disable firewalld 停止
+systemctl stop firewalld 禁用
+systemctl start firewalld.service 启动服务
+systemctl stop firewalld.service 关闭服务
+systemctl restart firewalld.service 重启服务
+systemctl status firewalld.service 显示服务状态
+systemctl enable firewalld.service 开机启用服务
+systemctl disable firewalld.service 开机禁用服务
+systemctl is-enabled firewalld.service 查看服务是否开机启动
+firewall-cmd --zone=public --list-ports 查看所有打开的端口
+firewall-cmd --reload 更新防火墙规则
+firewall-cmd --zone=public --add-port=80/tcp --permanent 添加端口
+firewall-cmd --zone= public --query-port=80/tcp 查看端口
+firewall-cmd --zone= public --remove-port=80/tcp --permanent 删除端口 
+```
 
 #### Linux 系统的中的进程操作指令你了解哪些？
 
+```sh
+ps -ef 查看所有进程
+ps -ef|grep <进程名> 过滤你需要的进程
+kill -s name kill指定名称的进程
+kill -s pid kill指定pid的进程
+top 实时显示进程状态
+```
+
 #### Linux 系统中的你是如何查找文件的？
+
+```sh
+find / -name file1 从根目录开始搜索文件/目录
+find / -user user1 搜索用户user的文件夹/目录
+find /dir -name *.bin 在目录/dir中搜索带有*.bin的文件
+locate <关键词> 快速定位文件
+locate *.mp4 寻找mp4结尾的文件
+whereis <关键词> 显示某二进制文件/可执行文件的路径
+which <关键词> 查找系统目录下的二进制文件
+```
 
 #### Linux 系统中的浏览文件的内容的指令有哪些？
 
+```sh
+vi/vim
+i 切换到输入模式，以输入字符。
+x 删除当前光标所在处的字符。
+: 切换到底线命令模式，以在最底一行输入命令。
+:q!	若曾修改过档案，又不想储存，使用 ! 为强制离开不储存档案。
+:wq	储存后离开，若为 :wq! 则为强制储存后离开 (常用)
+```
+
 #### Linux 系统中文件的打包和压缩、解压缩是如何实现的？
+
+```
+zip xxx.zip file 压缩至zip包
+zip -r xxx.zip file1 file2 dir1 将多个文件,文件夹打成压缩包
+unzip xxx.zip 解压zip包
+tar -cvfz xxx.tar.gz dir 创建gzip压缩包
+tar -zxvf xxx.tar.gz 解压gzip压缩包
+```
 
 #### 你是如何理解vi和vim的？
 
+Vim是从 vi 发展出来的一个文本编辑器。代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。
+
+简单的来说， vi 是老式的字处理器，不过功能已经很齐全了，但是还是有可以进步的地方。 vim 则可以说是程序开发者的一项很好用的工具。
+
+连 vim 的官方网站 ([http://www.vim.org](http://www.vim.org/)) 自己也说 vim 是一个程序开发工具而不是文字处理软件。
+
 #### vim下有几种工作模式？
+
+基本上 vi/vim 共分为三种模式，分别是**命令模式（Command mode）**，**输入模式（Insert mode）**和**底线命令模式（Last line mode）**
 
 ## 进阶篇
 
 #### Linux平台下的网络配置指令常用的有哪些？
 
+```sh
+ifconfig 查看网络接口属性
+ifconfig etho 查看某网卡的配置
+route -n 查看路由列表
+netstat -lntp 查看所有监听端口
+ifup etho 启用etho网络设备
+
+```
+
 #### Linux平台下的用户和用户组操作？
+
+```sh
+useradd <用户名> 添加用户
+userdel -r 删除用户
+usermod -g group_name user_name 修改用户的组
+usermod -aG group_name user_name 将用户添加到组
+groupadd group_name 添加组
+groupdel group_name 删除组
+passwd 修改口令
+passwd 修改某用户的口令
+```
 
 #### 你了解linux平台下的shell编程吗？
 
+Shell是命令解释器(command interpreter)，是Unix操作系统的用户接口，程序从用户接口得到输入信息，shell将用户程序及其输入翻译成操作系统内核（kernel）能够识别的指令，并且操作系统内核执行完将返回的输出通过shell再呈现给用户，下图所示用户、shell和操作系统的关系：
+
+![img](https://images2018.cnblogs.com/blog/1478220/201809/1478220-20180909162448693-2019827189.png)
+
+ 
+
+　　Shell也是一门编程语言，即shell脚本，shell是解释执行的脚本语言，可直接调用linux命令。 .java -> .class
+
+　　一个系统可以存在多个shell，可以通过cat /etc/shells命令查看系统中安装的shell，不同的shell可能支持的命令语法是不相同的。
+
 #### Linux平台下你自己安装过哪些软件？
+
+mysql,docker,redis,jdk,eureka,nacos.....
 
 # docker虚拟引擎
 
 ## 基础篇
 
 #### Docker是什么？
+
+
 
 #### 为什么要选择Docker？
 
