@@ -256,27 +256,207 @@ mysql,docker,redis,jdk,eureka,nacos.....
 
 #### Docker是什么？
 
+Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源。
 
+Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。
+
+容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。
 
 #### 为什么要选择Docker？
 
+Docker 是一个用于开发，交付和运行应用程序的开放平台。Docker 使您能够将应用程序与基础架构分开，从而可以快速交付软件。借助 Docker，您可以与管理应用程序相同的方式来管理基础架构。通过利用 Docker 的方法来快速交付，测试和部署代码，您可以大大减少编写代码和在生产环境中运行代码之间的延迟。
+
 #### 如何理解Docker中的镜像和容器？
 
-#### Docker的安装方式是怎样的？
+##### 镜像（Image）
+
+Docker 镜像是一个特殊的文件系统（https://hub.docker.com/），除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。例如JDK镜像、Centos镜像、MySQL镜像等，可以暂时先将其理解为一个安装程序。
+
+##### 容器（Container）
+
+Docker容器可以将其理解为一个运行镜像的载体，镜像（Image）和容器（Container）的关系，就像是光盘和光驱。容器基于镜像创建、启动，然后运行镜像的中的文件。
 
 #### Docker在线安装的基本步骤是怎样的？
 
+1. 下载离线安装包
+
+   ```sh
+   https://download.docker.com/linux/static/stable/x86_64/docker-20.10.6.tgz
+   ```
+
+2. 下载离线安装工具
+
+   ```shell
+   https://github.com/Jrohy/docker-install/
+   ```
+
+3. 创建安装目录
+
+   ```shell
+   [root@centos7964 docker]# pwd
+   /root/setup/docker
+   [root@centos7964 docker]# ls -l
+   总用量 68132
+   -rw-r--r--. 1 root root 69637582 8月   4 13:04 docker-20.10.6.tgz
+   -rw-r--r--. 1 root root   114793 8月   4 13:04 docker.bash
+   -rwxr-xr-x. 1 root root     7546 8月   4 13:04 install.sh
+   [root@centos7964 docker]#
+   ```
+
+4. 执行安装操作
+
+   ```shell
+   # 进入/root/setup/docker 文件夹
+   cd /root/setup/docker
+   # 为 install.sh添加执行权限
+   chmod +x install.sh
+   # 安装
+   ./install.sh -f docker-20.10.6.tgz
+   ```
+
+5. 检查安装状态
+
+   ```shell
+   docker info
+   ```
+
+#### Docker的安装方式是怎样的？
+
+1. 安装linux虚拟机
+
+2. 安装yum-util工具
+
+   ```sh
+   sudo yum install -y yum-utils 
+   ```
+
+3. 设置yum仓库
+
+   ```sh
+   sudo yum-config-manager \
+       --add-repo \
+       https://download.docker.com/linux/centos/docker-ce.repo
+   ```
+
+4. 更新yum缓存
+
+   ```sh
+   sudo yum makecache fast #yum 是包管理器
+   ```
+
+5. 安装docker
+
+   ```
+   sudo yum install -y docker-ce docker-ce-cli containerd.io
+   ```
+
 #### Docker支持的常用基本操作有哪些？
+
+```shell
+ systemctl start docker #启动docker
+ systemctl status docker #查看docker状态
+ systemctl enable docker #设置开机自启
+ systemctl disable docker #禁止开机自启
+ systemctl stop docker #停止docker服务
+ systemctl restart docker #重启docker
+ docker info #docker信息
+ docker info | grep 'Docker Root Dir:' #查看docker info中具体key的信息
+```
+
+修改配置文件 /etc/docker/daemon.json
+
+```shell
+cat <<EOF > /etc/docker/daemon.json
+{
+  "registry-mirrors": [
+    "https://docker.mirrors.ustc.edu.cn",
+    "http://hub-mirror.c.163.com"
+  ],
+  "max-concurrent-downloads": 10,
+  "log-driver": "json-file",
+  "log-level": "warn",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+    },
+  "data-root": "/var/lib/docker"
+}
+EOF
+```
 
 ## 进阶篇
 
 #### Docker进行数据管理的方式有哪些？
 
+在容器中管理数据主要有两种方式：
+
+- 数据卷（Volumes）
+- 挂载主机目录 (Bind mounts)
+
 #### Docker的数据卷你是如何理解的？
+
+数据卷是一个可供一个或多个容器使用的特殊目录，可以在容器之间共享和重用，默认会一直存在，即使容器被删除。
 
 #### Docker镜像如何制作？
 
+例如构建一个 tomcat 10 镜像流程，就像在一台电脑上安装配置 tomcat 环境一样：
+
+1. 选择基础镜像 centos:8（相当于一台新电脑，只有操作系统）
+2. 添加 jdk 和 tomcat 文件
+3. 设置环境变量
+4. 设置开机启动 tomcat
+
+编辑 `Dockerfile` 文件
+
+```shell
+cd /root/tomcat
+
+vim Dockerfile
+```
+
+在文件中添加以下内容：
+
+```shell
+# 选择基础镜像
+FROM centos:8
+
+# jdk 和 tomcat 文件添加到镜像的 /usr/local/ 目录下
+# ADD 指令会自动解压文件
+ADD jdk-8u291-linux-x64.tar.gz apache-tomcat-10.0.6.tar.gz /usr/local/
+
+# 切换到镜像中指定的文件夹下
+WORKDIR /usr/local/apache-tomcat-10.0.6/
+
+# 设置环境变量
+ENV JAVA_HOME=/usr/local/jdk1.8.0_291 \
+    CATALINA_HOME=/usr/local/apache-tomcat-10.0.6 \
+    PATH=/usr/local/jdk1.8.0_291/bin:/usr/local/apache-tomcat-10.0.6/bin:$PATH
+
+# EXPOSE 8080 只是一个声明，在运行时并不会因为这个声明应用就会开启这个端口的服务
+# 这个声明有两个好处：
+#   1.帮助镜像使用者理解这个镜像服务的端口，以方便配置映射
+#   2.在运行时使用随机端口映射时，也就是 docker run -P时，会自动随机映射 EXPOSE 的端口
+EXPOSE 8080
+
+# 设置启动命令
+CMD ["catalina.sh", "run"]
+```
+
+执行构建
+
+```shell
+cd /root/tomcat
+
+# 使用当前文件夹中的 Dockerfile 文件进行构建
+# 新构建的镜像命名为 tomcat:10
+docker build -t tomcat:10 ./
+```
+
 #### Docker下如何实现容器互联？
+
+Docker 中容器与容器之间进行通讯的解决方案一般有两种：
+第一种：两个容器通过宿主机进行通讯（容器中的端口会映射到宿主机上）
+第二种：两个容器之间直接通过虚拟网络进行连接,但是需要我们在docker中创建网络。
 
 # Redis
 ## 基础篇
