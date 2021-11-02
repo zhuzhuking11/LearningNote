@@ -41,10 +41,28 @@
 #### 为什么使用feign?
 基于Feign可以更加友好的实现服务调用，简化服务消费方对服务提供方方法的调用。
 #### @FeignClient注解的作用是什么？
+
+主要用于客户端服务发现，实际就是调用其他的服务。
+
 #### Feign方式调用底层负载均衡是如何实现的？
+
+feign集成了ribbon，主要是通过ribbon来实现负载均衡
+
 ## 进阶篇
 #### Feign方式的底层调用过程是怎样的？
+
+1. 通过 @EnableFeignCleints 注解告诉springcloud,启动 Feign Starter 组件。
+
+2) Feign Starter 会在项目启动过程中注册全局配置，扫描包下所由@FeignClient注解描述的接口，然后由系统底层创建接口实现类(JDK代理类)，并构建类的对象，然后交给spring管理(注册 IOC 容器)。
+3) Feign接口被调用时会被动态代理类逻辑拦截，然后将 @FeignClient 请求信息通过编码器创建 Request对象，基于此对象进行远程过程调用。
+4) Feign客户端请求对象会经Ribbon进行负载均衡，挑选出一个健康的 Server 实例（instance）。
+5) Feign客户端会携带 Request 调用远端服务并返回一个响应。
+6) Feign客户端对象对Response信息进行解析然后返回客户端。
+
 #### Feign方式的调用过程中出现异常如何解决？
+
+
+
 # Sentinel 熔断限流
 ## 基础篇
 #### Sentinel是什么？(阿里推出一个流量控制平台，防卫兵)
@@ -96,7 +114,8 @@
 #### 网关层面是如何通过服务名查找服务实例的？(Ribbon)
 #### 你了解Ribbon中的哪些负载均衡算法?(轮询，权重，hash,…..)
 #### 网关进行请求转发的流程是怎样，有哪些关键对象？
-待补充
+客户端向Spring Cloud Gateway发出请求。 如果Gateway Handler Mapping 通过断言predicates(predicates)的集合确定请求与路由(Routers)匹配，则将其发送到Gateway Web Handler。 Gateway Web Handler 通过确定的路由中所配置的过滤器集合链式调用过滤器（也就是所谓的责任链模式）。 Filter由虚线分隔的原因是， Filter可以在发送代理请求之前和之后运行逻辑。处理的逻辑是 在处理请求时 排在前面的过滤器先执行，而处理返回相应的时候，排在后面的过滤器先执行。
+
 #### 网关层面服务的映射方式怎样的？(断言-path,服务名/服务实例)
 #### 网关层如何记录服务的映射？(通过map，并要考虑锁的应用)
 #### 何为谓词?(网关中封装了判断逻辑的一个对象)
