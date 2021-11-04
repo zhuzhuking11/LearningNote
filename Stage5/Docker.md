@@ -40,3 +40,47 @@ vim /opt/web/index.jsp
 docker run -d --name web --restart=always -p 80:8080 -v /opt/web:/usr/local/apache-tomcat-10.0.6/webapps/ROOT tomcat:10
 ```
 
+
+
+# Spring Data Elasticsearch
+
+### Criteria数据查询
+
+- Criteria 封装搜索条件
+- CriteriaQuery 封装上面的条件对象,分页参数
+- ElasticsearchOperations 用来执行查询的工具
+
+**分页**
+
+- Pageable-向服务器提交的分页参数.page,size
+- Page - 从服务器返回的一页数据,数据列表,分页信息(可选,可以直接使用List<...>)
+
+
+
+- Repository
+
+  ```java
+  Page<Student> findByName(String key,Pageable pageable);
+  ```
+
+- Criteria
+
+  ```java
+  Criteria c= ...
+  CriteriaQuery q=new CriteriaQuery(c);
+  q.setPageable(pageable);
+  ...
+  ```
+
+  
+
+### 拼多商城商品搜索
+
+1. 添加spring data es依赖
+2. yml添加es服务器地址
+3. 新建实体类Item,封装从es搜索的数据
+4. 新建ItemRepository接口
+5. 添加搜索方法: `findByTitleOrSellPoint()`
+6. SearchService
+7. SearchController
+8. search.jsp
