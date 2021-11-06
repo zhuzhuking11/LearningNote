@@ -98,6 +98,20 @@ Kubernetes的三个核心对象
 
   控制容器的自动部署和自动销毁
 
-
-
 - Service
+
+  提供一个不变的访问入口,Service可以向所有容器已负载均衡的方式,转发调用
+
+```shell
+cat <<EOF > kubia-manual.yml 
+apiVersion: v1               # k8s api版本
+kind: Pod                    # 该部署文件用来创建pod资源
+metadata:                
+  name: kubia-manual         # pod名称前缀,后面会追加随机字符串
+spec:
+  containers:                # 对pod中容器的配置
+  - image: luksa/kubia       # 镜像名
+    name: kubia              # 容器名
+EOF
+```
+
