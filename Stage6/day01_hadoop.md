@@ -77,7 +77,7 @@ NFS(sun公司)
 
 注：虚拟机登录的用户名和密码都是root
 
-![1626146805796](day01_hadoop.assets/1626146805796.png)
+![1626146805796](https://raw.githubusercontent.com/zhuzhuking11/LearningNote/main/img/1626146805796.png)
 
 ## 4.2修改为静态IP
 
@@ -157,7 +157,7 @@ ip addr                  #查看IP地址 ip add
 
 ## 4.3mobaxTerm的使用
 
-![1626149857149](day01_hadoop.assets/1626149857149.png)                                                  
+![1626149857149](https://raw.githubusercontent.com/zhuzhuking11/LearningNote/main/img/1626149857149.png)                                                  
 
  
 
@@ -236,7 +236,7 @@ ssh-keygen
 
 执行该命令之后，按下三个回车即可
 
-![1626317476097](day01_hadoop.assets/1626317476097.png)
+![1626317476097](https://raw.githubusercontent.com/zhuzhuking11/LearningNote/main/img/1626317476097.png)
 
 ### 4.8.2拷贝公钥到同一台机器
 
@@ -378,6 +378,10 @@ java -version
 
 hadoop的定义：hadoop是一个分布式存储和分布式计算的框架。
 
+分布式存储:是一个数据存储技术,将数据存储在多个服务上的(存储单元)磁盘空间中.目前解决的是大量数据存储的问题
+
+分布式计算:是一个计算科学技术,将一个大量的计算过程拆分成若干个小的任务,由多个节点执行,然后进行数据汇总
+
 ## 5.2 hadoop的核心组件
 
 HDFS：分布式存储组件
@@ -406,11 +410,11 @@ Yarn：资源调度管理器
 
 3.x版本系列：基于2.x的版本进行多层优化（新特性），主要的是改变MapReduce的数据计算方式。
 
-![1626328865145](day01_hadoop.assets/1626328865145.png)
+![1626328865145](https://raw.githubusercontent.com/zhuzhuking11/LearningNote/main/img/1626328865145.png)
 
 ## 5.3 hadoop2.x架构模型
 
-![1626329611767](day01_hadoop.assets/1626329611767.png)
+![1626329611767](https://raw.githubusercontent.com/zhuzhuking11/LearningNote/main/img/1626329611767.png)
 
 **文件系统核心模块**：
 
