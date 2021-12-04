@@ -731,6 +731,3 @@ Hive不支持行级别的增删改的根本原因在于他的底层HDFS本身不
           // //用户登录成功之后,跳转到home页面
           // await this.$router.push("/")
 ```
-
-![img](https://github.com/zhuzhuking11/LearningNote/img/format,png-20211204204816172.png)
-
